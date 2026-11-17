@@ -17,7 +17,7 @@ app.use(express.json({limit: "40kb"}));
 app.use(express.urlencoded({extended: true, limit: "40kb"}));
 
 const start = async () => {
-    const connectionDb = await mongoose.connect("mongodb+srv://bbhamare9e20_db_user:YZp4vJFH.B-EnJ-@cluster0.5pdwyfi.mongodb.net/");
+    const connectionDb = await mongoose.connect("mongodb")
     console.log(`MONGO Connected DB HOST : ${connectionDb.connection.host}`);
     server.listen(app.get("port"), () =>{
         console.log("Server is running on port 8000");
