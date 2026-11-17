@@ -56,3 +56,5 @@ const register = async (req,res) =>{
 
     }
 }
+
+export {login , register};
