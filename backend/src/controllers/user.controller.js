@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import {User} from "../models/user.model";
+import {User} from "../models/user.model.js";
 import bcrypt, {hash} from "bcrypt";
 import crypto from "crypto";
 
@@ -11,7 +11,7 @@ const login = async (req,res) =>{
         return res.status(400).json({message: "Please Provide"})
     }
     try{
-        const user = await User.find({username});
+        const user = await User.findOne({username});
         if(!user){
             return res.status(httpStatus.NOT_FOUND).json({message: "User not Found!"})
         }
@@ -45,7 +45,7 @@ const register = async (req,res) =>{
         const newUser = new User({
             name: name,
             username: username,
-            hashedPassword: hashedPassword,
+            password: hashedPassword,
         });
 
         await newUser.save();
