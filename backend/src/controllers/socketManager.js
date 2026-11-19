@@ -100,6 +100,7 @@ export const connectToSocket = (server) => {
             var key
 
             for (const [k, v] of JSON.parse(JSON.stringify(Object.entries(connections)))) {
+                // k = meeting ID and v = array of socket IDs
 
                 for (let a = 0; a < v.length; ++a) {
                     if (v[a] === socket.id) {
