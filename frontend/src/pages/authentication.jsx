@@ -23,7 +23,9 @@ const defaultTheme = createTheme();
 
 export default function Authentication() {
 
-    
+    const [backgroundImage] = React.useState(
+        () => `https://picsum.photos/seed/${Math.random().toString(36).slice(2)}/1920/1080`
+    );
 
     const [username, setUsername] = React.useState();
     const [password, setPassword] = React.useState();
@@ -76,7 +78,7 @@ export default function Authentication() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'url(https://picsum.photos)',
+                        backgroundImage: `url(${backgroundImage})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
