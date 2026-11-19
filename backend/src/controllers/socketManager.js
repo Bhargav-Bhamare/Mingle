@@ -97,7 +97,7 @@ export const connectToSocket = (server) => {
 
             var diffTime = Math.abs(timeOnline[socket.id] - new Date())
 
-            var key
+            var key //This will store the meeting ID in which the disconnected user was present.
 
             for (const [k, v] of JSON.parse(JSON.stringify(Object.entries(connections)))) {
                 // k = meeting ID and v = array of socket IDs
