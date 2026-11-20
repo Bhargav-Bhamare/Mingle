@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -19,19 +18,23 @@ import { Snackbar } from '@mui/material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+    palette: {
+        primary: { main: '#665cf6' },
+    },
+    typography: {
+        fontFamily: "'DM Sans', system-ui, sans-serif",
+    },
+    shape: { borderRadius: 12 },
+});
 
 export default function Authentication() {
 
-    const [backgroundImage] = React.useState(
-        () => `https://picsum.photos/seed/${Math.random().toString(36).slice(2)}/1920/1080`
-    );
-
-    const [username, setUsername] = React.useState();
-    const [password, setPassword] = React.useState();
-    const [name, setName] = React.useState();
-    const [error, setError] = React.useState();
-    const [message, setMessage] = React.useState();
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [name, setName] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [message, setMessage] = React.useState("");
 
 
     const [formState, setFormState] = React.useState(0);
@@ -60,9 +63,9 @@ export default function Authentication() {
                 setPassword("")
             }
         } catch (err) {
-
-            console.log(err);
-            let message = (err.response.data.message);
+            const message = err?.response?.data?.message
+                || err?.message
+                || "Unable to complete the request.";
             setError(message);
         }
     }
@@ -73,20 +76,30 @@ export default function Authentication() {
             <Grid container component="main" sx={{ height: '100vh' }}>
                 <CssBaseline />
                 <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
+                    size={{ xs: 0, sm: 4, md: 7 }}
                     sx={{
-                        backgroundImage: `url(${backgroundImage})`,
+                        background:
+                            'radial-gradient(circle at 20% 20%, rgba(255,255,255,.22), transparent 24%), linear-gradient(145deg, #665cf6 0%, #4d46c8 55%, #302b82 100%)',
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
+                        position: 'relative',
+                        '&::after': {
+                            content: '"Mingle"',
+                            position: 'absolute',
+                            left: 'clamp(32px, 7vw, 96px)',
+                            bottom: 'clamp(32px, 7vw, 96px)',
+                            color: 'rgba(255,255,255,.95)',
+                            fontFamily: "'Manrope', sans-serif",
+                            fontSize: 'clamp(48px, 8vw, 96px)',
+                            fontWeight: 800,
+                            letterSpacing: '-5px',
+                        },
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <Grid size={{ xs: 12, sm: 8, md: 5 }} component={Paper} elevation={6} square>
                     <Box
                         sx={{
                             my: 8,

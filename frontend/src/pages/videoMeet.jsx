@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import io from "socket.io-client";
 import { Badge, IconButton, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
-import "../styles/videoComponent.css"
+import styles from "../styles/videoComponent.module.css";
 import CallEndIcon from '@mui/icons-material/CallEnd'
 import MicIcon from '@mui/icons-material/Mic'
 import MicOffIcon from '@mui/icons-material/MicOff'
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
 import ChatIcon from '@mui/icons-material/Chat'
-// import server from '../environment';
+import server from '../environment';
 
-const server_url = "http://localhost:8000/:url"; // Replace with your actual server URL
+const server_url = server;
 
 var connections = {};
 
@@ -67,8 +67,7 @@ export default function VideoMeetComponent() {
     useEffect(() => {
         console.log("HELLO")
         getPermissions();
-
-    })
+    }, [])
 
     let getDislayMedia = () => {
         if (screen) {
@@ -151,7 +150,9 @@ export default function VideoMeetComponent() {
         for (let id in connections) {
             if (id === socketIdRef.current) continue
 
-            connections[id].addStream(window.localStream)
+            window.localStream.getTracks().forEach(track => {
+                connections[id].addTrack(track, window.localStream)
+            })
 
             connections[id].createOffer().then((description) => {
                 console.log(description)
@@ -177,7 +178,9 @@ export default function VideoMeetComponent() {
             localVideoref.current.srcObject = window.localStream
 
             for (let id in connections) {
-                connections[id].addStream(window.localStream)
+                window.localStream.getTracks().forEach(track => {
+                    connections[id].addTrack(track, window.localStream)
+                })
 
                 connections[id].createOffer().then((description) => {
                     connections[id].setLocalDescription(description)
@@ -220,7 +223,9 @@ export default function VideoMeetComponent() {
         for (let id in connections) {
             if (id === socketIdRef.current) continue
 
-            connections[id].addStream(window.localStream)
+            window.localStream.getTracks().forEach(track => {
+                connections[id].addTrack(track, window.localStream)
+            })
 
             connections[id].createOffer().then((description) => {
                 connections[id].setLocalDescription(description)
@@ -300,7 +305,7 @@ export default function VideoMeetComponent() {
                     }
 
                     // Wait for their video stream
-                    connections[socketListId].onaddstream = (event) => {
+                    connections[socketListId].ontrack = (event) => {
                         console.log("BEFORE:", videoRef.current);
                         console.log("FINDING ID: ", socketListId);
 
@@ -312,7 +317,7 @@ export default function VideoMeetComponent() {
                             // Update the stream of the existing video
                             setVideos(videos => {
                                 const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId ? { ...video, stream: event.stream } : video
+                                    video.socketId === socketListId ? { ...video, stream: event.streams[0] } : video
                                 );
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
@@ -322,7 +327,7 @@ export default function VideoMeetComponent() {
                             console.log("CREATING NEW");
                             let newVideo = {
                                 socketId: socketListId,
-                                stream: event.stream,
+                                stream: event.streams[0],
                                 autoplay: true,
                                 playsinline: true
                             };
@@ -338,11 +343,15 @@ export default function VideoMeetComponent() {
 
                     // Add the local video stream
                     if (window.localStream !== undefined && window.localStream !== null) {
-                        connections[socketListId].addStream(window.localStream)
+                        window.localStream.getTracks().forEach(track => {
+                            connections[socketListId].addTrack(track, window.localStream)
+                        })
                     } else {
                         let blackSilence = (...args) => new MediaStream([black(...args), silence()])
                         window.localStream = blackSilence()
-                        connections[socketListId].addStream(window.localStream)
+                        window.localStream.getTracks().forEach(track => {
+                            connections[socketListId].addTrack(track, window.localStream)
+                        })
                     }
                 })
 
@@ -351,7 +360,9 @@ export default function VideoMeetComponent() {
                         if (id2 === socketIdRef.current) continue
 
                         try {
-                            connections[id2].addStream(window.localStream)
+                            window.localStream.getTracks().forEach(track => {
+                                connections[id2].addTrack(track, window.localStream)
+                            })
                         } catch (e) { }
 
                         connections[id2].createOffer().then((description) => {
@@ -405,7 +416,7 @@ export default function VideoMeetComponent() {
             let tracks = localVideoref.current.srcObject.getTracks()
             tracks.forEach(track => track.stop())
         } catch (e) { }
-        window.location.href = "/"
+        window.location.href = "/home"
     }
 
     let openChat = () => {
@@ -432,15 +443,16 @@ export default function VideoMeetComponent() {
 
 
     let sendMessage = () => {
-        console.log(socketRef.current);
-        socketRef.current.emit('chat-message', message, username)
-        setMessage("");
+        const text = message.trim();
+        if (!text || !socketRef.current?.connected) return;
 
-        // this.setState({ message: "", sender: username })
+        socketRef.current.emit('chat-message', text, username)
+        setMessage("");
     }
 
     
     let connect = () => {
+        if (!username.trim()) return;
         setAskForUsername(false);
         getMedia();
     }
@@ -451,18 +463,32 @@ export default function VideoMeetComponent() {
 
             {askForUsername === true ?
 
-                <div>
-
-
-                    <h2>Enter into Lobby </h2>
-                    <TextField id="outlined-basic" label="Username" value={username} onChange={e => setUsername(e.target.value)} variant="outlined" />
-                    <Button variant="contained" onClick={connect}>Connect</Button>
-
-
-                    <div>
-                        <video ref={localVideoref} autoPlay muted></video>
+                <div className={styles.lobby}>
+                    <section className={styles.lobbyPanel}>
+                        <h2>Enter the lobby</h2>
+                        <p>Choose a display name and join the meeting.</p>
+                        <div className={styles.lobbyControls}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Display name"
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                onKeyDown={e => { if (e.key === "Enter") connect() }}
+                                variant="outlined"
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={connect}
+                                disabled={!username.trim()}
+                                sx={{ px: 3, height: 56, borderRadius: "12px", background: "#665cf6" }}
+                            >
+                                Join meeting
+                            </Button>
+                        </div>
+                    </section>
+                    <div className={styles.lobbyPreview}>
+                        <video ref={localVideoref} autoPlay muted playsInline></video>
                     </div>
-
                 </div> :
 
 
@@ -477,14 +503,13 @@ export default function VideoMeetComponent() {
 
                                 {messages.length !== 0 ? messages.map((item, index) => {
 
-                                    console.log(messages)
                                     return (
-                                        <div style={{ marginBottom: "20px" }} key={index}>
-                                            <p style={{ fontWeight: "bold" }}>{item.sender}</p>
+                                        <div className={styles.chatMessage} key={index}>
+                                            <strong>{item.sender}</strong>
                                             <p>{item.data}</p>
                                         </div>
                                     )
-                                }) : <p>No Messages Yet</p>}
+                                }) : <p className={styles.emptyChat}>No messages yet</p>}
 
 
                             </div>

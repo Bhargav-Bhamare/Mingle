@@ -1,69 +1,382 @@
 .landingPageContainer {
-  width: 100%;
-  height: 100vh;
-  background: url("/background.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: white;
+  min-height: 100vh;
+  color: #17213c;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(108, 99, 255, 0.12), transparent 24rem),
+    linear-gradient(135deg, #f9fbff 0%, #eef3ff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.landingPageContainer::before {
+  content: "";
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  right: -12rem;
+  bottom: -14rem;
+  border-radius: 50%;
+  background: rgba(255, 152, 57, 0.08);
 }
 
 .landingPageContainer nav {
-  padding-inline: 1.2rem;
-  padding-block: 1.6rem;
+  height: 88px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  position: relative;
+  z-index: 2;
 }
 
-.landingPageContainer nav h2 {
-  font-size: 1.8rem;
-  font-weight: 500;
+.navHeader h2 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #17213c;
+  letter-spacing: -1px;
 }
 
 .landingPageContainer nav .navlist {
   display: flex;
-  gap: 1.6rem;
-  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+}
 
+.landingPageContainer nav .navlist p {
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #53617e;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 180ms ease;
+}
+
+.landingPageContainer nav .navlist p:hover {
+  color: #665cf6;
+  background: rgba(102, 92, 246, 0.07);
+}
+
+.landingPageContainer nav .navlist div[role='button'] {
+  margin-left: 8px;
+  padding: 11px 18px;
+  border-radius: 12px;
+  background: #665cf6;
+  box-shadow: 0 10px 24px rgba(102, 92, 246, 0.24);
+  cursor: pointer;
+}
+
+.landingPageContainer nav .navlist div[role='button'] p {
+  color: #fff;
+  padding: 0;
+  background: transparent;
 }
 
 .landingMainContainer {
-  display: flex;
-  justify-content: space-between;
-  padding-inline: 3rem;
-  height: 80vh;
+  min-height: calc(100vh - 88px);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 32px 72px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
   align-items: center;
+  gap: 48px;
+  position: relative;
+  z-index: 1;
+  text-align: left;
 }
 
-.landingMainContainer>div:nth-child(1) {
-  font-size: 2.2rem;
+.landingMainContainer h1 {
+  max-width: 650px;
+  margin-bottom: 20px;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(48px, 6vw, 82px);
+  line-height: 0.98;
+  letter-spacing: -4px;
+  color: #17213c;
 }
 
-.landingMainContainer>div:nth-child(1) div[role='button'] {
-  background: #D97500;
+.landingMainContainer p {
+  color: #6b7896;
+  font-size: 20px;
+  margin-bottom: 32px;
+}
+
+.landingMainContainer div[role='button'] {
   width: fit-content;
-  padding: 1rem;
-  border-radius: 20px;
-  margin-top: 1.9rem;
+  padding: 16px 22px;
+  border-radius: 14px;
+  background: #ff9d45;
+  box-shadow: 0 14px 30px rgba(255, 157, 69, 0.22);
+  transition: 180ms ease;
 }
 
-.landingMainContainer>div:nth-child(1) div[role='button'] a {
+.landingMainContainer div[role='button']:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(255, 157, 69, 0.28);
+}
+
+.landingMainContainer div[role='button'] a {
+  color: #fff;
   text-decoration: none;
-  color: white;
-  font-size: 1.7rem;
+  font-weight: 700;
 }
 
-.landingMainContainer>div:nth-child(2) img {
-  height: 70vh;
-  width: auto;
+.landingMainContainer > div:last-child {
+  display: flex;
+  justify-content: center;
+}
+
+.landingMainContainer > div:last-child img {
+  max-width: 100%;
+  max-height: 650px;
+  filter: drop-shadow(0 30px 40px rgba(52, 67, 112, 0.16));
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .navBar {
+  height: 82px;
+  padding: 0 clamp(20px, 5vw, 64px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-inline: 20px;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #edf0f7;
+  backdrop-filter: blur(16px);
+}
 
+.navBar h2 {
+  font-family: 'Manrope', sans-serif;
+  color: #17213c;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navActions .historyAction {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #53617e;
+  cursor: pointer;
+}
+
+.meetContainer {
+  min-height: calc(100vh - 82px);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px clamp(20px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: 1fr 0.82fr;
+  align-items: center;
+  gap: 64px;
+  background: transparent;
+}
+
+.leftPanel {
+  text-align: left;
+}
+
+.leftPanel h2 {
+  max-width: 650px;
+  margin-bottom: 28px;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -2.5px;
+  color: #17213c;
+}
+
+.joinRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 520px;
+  padding: 8px;
+  border: 1px solid #e7eaf2;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(31, 45, 79, 0.08);
+}
+
+.joinRow .MuiTextField-root {
+  flex: 1;
+}
+
+.joinRow .MuiOutlinedInput-notchedOutline {
+  border: 0;
+}
+
+.rightPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  border-radius: 32px;
+  background:
+    linear-gradient(145deg, rgba(102, 92, 246, 0.12), rgba(255, 255, 255, 0.74)),
+    #eef1ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.rightPanel > img {
+  width: min(88%, 420px);
+  height: auto;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 24px 50px rgba(44, 53, 96, 0.16);
+}
+
+.historyPage {
+  min-height: 100vh;
+  background: #f6f8fc;
+}
+
+.historyHeader {
+  height: 82px;
+  padding: 0 clamp(20px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border-bottom: 1px solid #edf0f7;
+}
+
+.historyHeader h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 24px;
+  color: #17213c;
+}
+
+.historyContent {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  text-align: left;
+}
+
+.historyContent h2 {
+  margin-bottom: 24px;
+  font-family: 'Manrope', sans-serif;
+  color: #17213c;
+  font-size: 32px;
+}
+
+.historyGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.historyCard {
+  border: 1px solid #e8ebf3 !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  box-shadow: 0 10px 28px rgba(31, 45, 79, 0.06) !important;
+}
+
+@media (max-width: 900px) {
+  .landingMainContainer,
+  .meetContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .landingMainContainer {
+    padding-top: 32px;
+    text-align: center;
+  }
+
+  .landingMainContainer h1,
+  .landingMainContainer p {
+    margin-inline: auto;
+  }
+
+  .landingMainContainer div[role='button'] {
+    margin-inline: auto;
+  }
+
+  .landingMainContainer > div:last-child img {
+    max-height: 380px;
+  }
+
+  .meetContainer {
+    text-align: center;
+  }
+
+  .leftPanel {
+    text-align: center;
+  }
+
+  .joinRow {
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .landingPageContainer nav {
+    height: 72px;
+    padding-inline: 18px;
+  }
+
+  .landingPageContainer nav .navlist p {
+    display: none;
+  }
+
+  .landingMainContainer {
+    min-height: calc(100vh - 72px);
+    padding: 28px 18px 48px;
+  }
+
+  .landingMainContainer h1 {
+    font-size: 44px;
+    letter-spacing: -2.5px;
+  }
+
+  .landingMainContainer p {
+    font-size: 17px;
+  }
+
+  .navBar,
+  .historyHeader {
+    height: 72px;
+    padding-inline: 18px;
+  }
+
+  .historyAction p {
+    display: none;
+  }
+
+  .meetContainer {
+    min-height: calc(100vh - 72px);
+    gap: 28px;
+    padding: 28px 18px;
+  }
+
+  .leftPanel h2 {
+    font-size: 38px;
+  }
+
+  .joinRow {
+    flex-direction: column;
+  }
+
+  .joinRow .MuiTextField-root,
+  .joinRow .MuiButton-root {
+    width: 100%;
+  }
+
+  .rightPanel {
+    min-height: 280px;
+  }
 }
