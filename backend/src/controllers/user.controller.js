@@ -51,11 +51,12 @@ const register = async (req,res) =>{
             name: name,
             username: username,
             password: hashedPassword,
+            token: crypto.randomBytes(20).toString("hex"),
         });
 
         await newUser.save();
 
-        res.status(httpStatus.CREATED).json({message: "User Registered!" })
+        res.status(httpStatus.CREATED).json({message: "User Registered!", token: newUser.token })
     }catch (e){
         res.json({message: `Something went wrong ${e}`})
 

@@ -32,7 +32,13 @@ export const AuthProvider = ({ children }) => {
 
 
             if (request.status === httpStatus.CREATED) {
-                await handleLogin(username, password);
+                const token = request.data?.token;
+                if (!token) {
+                    throw new Error("The registration response did not include an authentication token.");
+                }
+
+                localStorage.setItem("token", token);
+                router("/home");
                 return request.data.message;
             }
         } catch (err) {
