@@ -1,6 +1,6 @@
 const server = import.meta.env.DEV
     ? "http://localhost:8000"
-    : "https://apnacollegebackend.onrender.com";
+    : "https://minglebackend-yeav.onrender.com/";
 
 
 export default server;
