@@ -12,7 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from '../contexts/AuthContext';
-import { Snackbar } from '@mui/material';
 
 
 
@@ -34,12 +33,9 @@ export default function Authentication() {
     const [password, setPassword] = React.useState("");
     const [name, setName] = React.useState("");
     const [error, setError] = React.useState("");
-    const [message, setMessage] = React.useState("");
 
 
     const [formState, setFormState] = React.useState(0);
-
-    const [open, setOpen] = React.useState(false)
 
 
     const { handleRegister, handleLogin } = React.useContext(AuthContext);
@@ -48,19 +44,12 @@ export default function Authentication() {
         try {
             if (formState === 0) {
 
-                let result = await handleLogin(username, password)
+                await handleLogin(username, password)
 
 
             }
             if (formState === 1) {
-                let result = await handleRegister(name, username, password);
-                console.log(result);
-                setUsername("");
-                setMessage(result);
-                setOpen(true);
-                setError("")
-                setFormState(0)
-                setPassword("")
+                await handleRegister(name, username, password);
             }
         } catch (err) {
             const message = err?.response?.data?.message
@@ -177,13 +166,6 @@ export default function Authentication() {
                     </Box>
                 </Grid>
             </Grid>
-
-            <Snackbar
-
-                open={open}
-                autoHideDuration={4000}
-                message={message}
-            />
 
         </ThemeProvider>
     );

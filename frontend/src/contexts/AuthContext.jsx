@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
 
 
             if (request.status === httpStatus.CREATED) {
+                await handleLogin(username, password);
                 return request.data.message;
             }
         } catch (err) {
@@ -45,9 +46,6 @@ export const AuthProvider = ({ children }) => {
                 username: username,
                 password: password
             });
-
-            console.log(username, password)
-            console.log(request.data)
 
             if (request.status === httpStatus.OK) {
                 localStorage.setItem("token", request.data.token);

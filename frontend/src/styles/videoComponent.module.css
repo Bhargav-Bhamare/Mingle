@@ -230,9 +230,10 @@
     }
 
     .chatRoom {
-        right: 8px;
-        top: 8px;
-        height: calc(100vh - 16px);
-        width: calc(100vw - 16px);
+        top: auto;
+        right: 12px;
+        bottom: 82px;
+        height: min(52vh, 420px);
+        width: min(380px, calc(100vw - 24px));
     }
 }

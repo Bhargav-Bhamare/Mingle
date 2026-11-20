@@ -325,12 +325,34 @@
 
 @media (max-width: 640px) {
   .landingPageContainer nav {
-    height: 72px;
-    padding-inline: 18px;
+    height: auto;
+    min-height: 72px;
+    padding: 10px 18px;
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+
+  .navHeader h2 {
+    font-size: 24px;
+  }
+
+  .landingPageContainer nav .navlist {
+    flex: 1 0 100%;
+    justify-content: center;
+    gap: 4px;
   }
 
   .landingPageContainer nav .navlist p {
-    display: none;
+    display: block;
+    padding: 8px 9px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .landingPageContainer nav .navlist div[role='button'] {
+    margin-left: 2px;
+    padding: 8px 10px;
+    white-space: nowrap;
   }
 
   .landingMainContainer {
